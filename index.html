@@ -12,38 +12,37 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
-            cursor: none; /* Hide default cursor */
+            background-color: #111827; /* Deep charcoal background */
+            color: #E5E7EB; /* Light gray text */
         }
         .font-mono {
             font-family: 'Fira Code', monospace;
         }
         .section-heading {
-            color: #212529;
+            color: #F9FAFB; /* Off-white for headings */
         }
         .accent-color {
-            color: #0d6efd;
+            color: #F59E0B; /* Bold amber/gold accent */
         }
         .card {
-            background-color: #ffffff;
-            border: 1px solid #e9ecef;
+            background-color: #1F2937; /* Slightly lighter card background */
+            border: 1px solid #374151; /* Subtle border */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 25px -10px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 25px -10px rgba(245, 158, 11, 0.1); /* Amber glow on hover */
         }
         .skill-tag {
-            background-color: rgba(13, 110, 253, 0.1);
-            color: #0d6efd;
+            background-color: rgba(245, 158, 11, 0.1); /* Amber background */
+            color: #F59E0B; /* Amber text */
         }
         .nav-link {
             transition: color 0.3s ease;
-            color: #495057;
+            color: #D1D5DB; /* Lighter gray for nav links */
         }
         .nav-link:hover {
-            color: #0d6efd;
+            color: #F59E0B; /* Amber on hover */
         }
         .fade-in-section {
             opacity: 0;
@@ -60,23 +59,24 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(17, 24, 39, 0.8); /* Darker overlay */
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
         }
         .modal-content {
-            background-color: white;
+            background-color: #1F2937; /* Dark modal background */
             padding: 2rem;
             border-radius: 0.5rem;
             max-width: 500px;
             width: 90%;
             position: relative;
+            border: 1px solid #374151;
         }
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #0d6efd;
+            border: 4px solid #374151;
+            border-top: 4px solid #F59E0B; /* Amber loader */
             border-radius: 50%;
             width: 30px;
             height: 30px;
@@ -87,52 +87,28 @@
             100% { transform: rotate(360deg); }
         }
         /* Custom Cursor */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #0d6efd;
-            border-radius: 50%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease-out;
-        }
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(13, 110, 253, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.2s ease-out;
-        }
         /* Terminal Blinking Cursor */
         .blinking-cursor {
             display: inline-block;
             width: 10px;
             height: 1.2rem;
-            background-color: #495057;
+            background-color: #9CA3AF;
             animation: blink 1s step-end infinite;
         }
         @keyframes blink {
             from, to { background-color: transparent }
-            50% { background-color: #495057; }
+            50% { background-color: #9CA3AF; }
         }
         /* Experience Tabs */
         .tab-btn {
             background-color: transparent;
-            border-left: 2px solid #dee2e6;
-            color: #6c757d;
+            border-left: 2px solid #374151;
+            color: #9CA3AF;
         }
         .tab-btn.active {
-            border-left-color: #0d6efd;
-            background-color: rgba(13, 110, 253, 0.05);
-            color: #0d6efd;
+            border-left-color: #F59E0B; /* Amber active tab */
+            background-color: rgba(245, 158, 11, 0.05);
+            color: #F59E0B; /* Amber active text */
         }
         .tab-content {
             display: none;
@@ -144,13 +120,10 @@
 </head>
 <body class="antialiased">
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-opacity-80 backdrop-blur-md bg-[#f8f9fa]/80 shadow-sm">
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900/70 backdrop-blur-lg border-b border-gray-700/50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold accent-color">VP</a>
+            <a href="#" class="text-xl font-bold accent-color">Vinay Parihar</a>
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#about" class="nav-link font-medium">About</a>
                 <a href="#experience" class="nav-link font-medium">Experience</a>
@@ -159,18 +132,18 @@
                 <a href="#contact" class="nav-link font-medium">Contact</a>
             </div>
             <div class="md:hidden">
-                <button id="menu-btn" class="text-slate-700 focus:outline-none">
+                <button id="menu-btn" class="text-gray-300 focus:outline-none">
                     <i data-lucide="menu"></i>
                 </button>
             </div>
         </nav>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white">
-            <a href="#about" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">About</a>
-            <a href="#experience" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Experience</a>
-            <a href="#projects" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Alpha</a>
-            <a href="#insights" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Insights</a>
-            <a href="#contact" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Contact</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800">
+            <a href="#about" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">About</a>
+            <a href="#experience" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Experience</a>
+            <a href="#projects" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Alpha</a>
+            <a href="#insights" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Insights</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-gray-300 hover:bg-gray-700">Contact</a>
         </div>
     </header>
 
@@ -178,21 +151,18 @@
         <!-- Hero Section -->
         <section id="hero" class="min-h-[80vh] flex flex-col justify-center fade-in-section">
             <h1 class="text-lg accent-color font-mono">Vinay Parihar</h1>
-            <h2 class="text-4xl sm:text-7xl font-bold text-[#212529] mt-4">Quantitative Analysis & Trading.</h2>
-            <h3 class="text-4xl sm:text-6xl font-bold text-[#495057] mt-2">I engineer alpha and manage risk.</h3>
+            <h2 class="text-4xl sm:text-7xl font-bold text-gray-100 mt-4">Quant.</h2>
+            <h3 class="text-4xl sm:text-6xl font-bold text-gray-400 mt-2">I engineer alpha and manage risk.</h3>
             <div class="mt-6">
-                <div id="terminal" class="font-mono text-[#6c757d] text-sm bg-white/50 p-4 rounded-lg border border-[#e9ecef] max-w-xl">
+                <div id="terminal" class="font-mono text-gray-400 text-sm bg-gray-800/50 p-4 rounded-lg border border-gray-700 max-w-xl">
                     <span id="terminal-text"></span><span class="blinking-cursor"></span>
                 </div>
             </div>
             <div class="mt-8 flex items-center space-x-6">
-                <a href="https://github.com/vinay2209" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                <a href="https://github.com/vinay2209" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
                     <i data-lucide="github" class="w-6 h-6"></i>
                 </a>
-                <a href="https://linkedin.com/in/vinayparihar" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
-                    <i data-lucide="linkedin" class="w-6 h-6"></i>
-                </a>
-                <a href="#contact" class="border border-[#0d6efd] text-[#0d6efd] px-6 py-3 rounded-md hover:bg-[#0d6efd] hover:text-[#ffffff] transition-all duration-300 font-mono">
+                <a href="#contact" class="border border-[#F59E0B] text-[#F59E0B] px-6 py-3 rounded-md hover:bg-[#F59E0B] hover:text-[#111827] transition-all duration-300 font-mono">
                     Contact Me
                 </a>
             </div>
@@ -202,17 +172,17 @@
         <section id="about" class="py-24 fade-in-section">
             <h2 class="section-heading text-3xl font-bold mb-8 flex items-center">
                 <span class="accent-color font-mono text-2xl mr-4">01.</span> Profile
-                <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+                <span class="h-px bg-gray-700 flex-grow ml-6"></span>
             </h2>
             <div class="grid md:grid-cols-5 gap-10">
-                <div class="md:col-span-3 text-[#6c757d] space-y-4">
+                <div class="md:col-span-3 text-gray-400 space-y-4">
                     <p>
                         As a detail-obsessed engineer, I thrive at the intersection of technology and finance. My primary objective is to leverage my skills in statistical modeling, machine learning, and programming to design, backtest, and deploy profitable, automated trading strategies.
                     </p>
                     <p>
                         My background in electronics and signal processing provides a unique perspective on analyzing financial time-series data and extracting predictive signals from noisy market data. I am passionate about understanding market microstructure and the dynamics of order books to find a competitive edge.
                     </p>
-                    <p class="text-[#212529]">My core quantitative & technical stack includes:</p>
+                    <p class="text-gray-200">My core quantitative & technical stack includes:</p>
                     <ul class="grid grid-cols-2 gap-2 font-mono text-sm">
                         <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Python (Pandas, NumPy)</li>
                         <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Time Series Analysis</li>
@@ -223,9 +193,18 @@
                     </ul>
                 </div>
                 <div class="md:col-span-2 flex justify-center items-start">
-                    <div class="w-64 h-64 relative group">
-                        <div class="absolute inset-0 bg-[#0d6efd] rounded-md z-0 transition-transform duration-300 group-hover:translate-x-3 group-hover:translate-y-3"></div>
-                        <img src="https://placehold.co/400x400/e9ecef/212529?text=VP" alt="Vinay Parihar" class="w-full h-full object-cover rounded-md z-10 relative group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
+                    <div class="w-64 h-64 relative group flex items-center justify-center bg-gray-800 border border-gray-700 rounded-md overflow-hidden p-4">
+                        <!-- Fun animated chart instead of placeholder -->
+                        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <polyline class="stroke-[#F59E0B] stroke-2 fill-none" points="0,80 10,60 20,70 30,50 40,55 50,40 60,45 70,30 80,40 90,20 100,30" style="stroke-dasharray: 500; stroke-dashoffset: 500; animation: draw-chart 2s ease-out forwards;"></polyline>
+                            <style>
+                                @keyframes draw-chart {
+                                    to {
+                                        stroke-dashoffset: 0;
+                                    }
+                                }
+                            </style>
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -235,7 +214,7 @@
         <section id="experience" class="py-24 fade-in-section">
             <h2 class="section-heading text-3xl font-bold mb-8 flex items-center">
                 <span class="accent-color font-mono text-2xl mr-4">02.</span> Career & Education
-                 <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+                 <span class="h-px bg-gray-700 flex-grow ml-6"></span>
             </h2>
             <div class="max-w-3xl">
                 <div class="flex">
@@ -245,22 +224,22 @@
                     </div>
                     <div class="ml-6 flex-grow">
                         <div id="experience-tab" class="tab-content active">
-                            <h3 class="text-xl font-semibold text-[#212529]">
+                            <h3 class="text-xl font-semibold text-gray-100">
                                 Machine Learning Engineer Intern <span class="accent-color">@ Distinct Digital Solution</span>
                             </h3>
-                            <p class="font-mono text-sm text-[#6c757d] mb-4">June 2024 - Present</p>
-                            <ul class="space-y-2 text-[#6c757d]">
+                            <p class="font-mono text-sm text-gray-400 mb-4">June 2024 - Present</p>
+                            <ul class="space-y-2 text-gray-400">
                                 <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Built end-to-end ML pipelines for large-scale time-series datasets.</li>
                                 <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Developed predictive models, improving accuracy via cross-validation.</li>
                                 <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Engineered real-time dashboards to track model performance.</li>
                             </ul>
                         </div>
                         <div id="education-tab" class="tab-content">
-                            <h3 class="text-xl font-semibold text-[#212529]">
+                            <h3 class="text-xl font-semibold text-gray-100">
                                 B.E., Electronics & Telecom <span class="accent-color">@ Don Bosco Inst. of Tech.</span>
                             </h3>
-                            <p class="font-mono text-sm text-[#6c757d] mb-4">Expected June 2026</p>
-                            <ul class="space-y-2 text-[#6c757d]">
+                            <p class="font-mono text-sm text-gray-400 mb-4">Expected June 2026</p>
+                            <ul class="space-y-2 text-gray-400">
                                 <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Relevant Coursework: Signal Processing, Probability & Statistics.</li>
                                 <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Focus on Linear Algebra and Digital Communications.</li>
                             </ul>
@@ -274,17 +253,17 @@
         <section id="projects" class="py-24 fade-in-section">
             <h2 class="section-heading text-3xl font-bold mb-12 flex items-center">
                 <span class="accent-color font-mono text-2xl mr-4">03.</span> Quantitative Projects
-                <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+                <span class="h-px bg-gray-700 flex-grow ml-6"></span>
             </h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Project 1 -->
                 <div class="card p-6 rounded-md flex flex-col" data-project-title="High-Frequency Trading System" data-project-desc="Engineered 68 predictive features from order book data. Trained LightGBM model on 3.75M samples, achieving 0.87 AUC. Built a backtester modeling latency and slippage.">
                     <div class="flex justify-between items-center mb-4">
                         <i data-lucide="folder" class="w-10 h-10 accent-color"></i>
-                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-[#adb5bd] hover:text-[#0d6efd]"></i></a>
+                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-gray-500 hover:text-white"></i></a>
                     </div>
-                    <h3 class="text-xl font-bold text-[#212529] mb-2">High-Frequency Trading System</h3>
-                    <p class="text-[#6c757d] text-sm flex-grow">
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">High-Frequency Trading System</h3>
+                    <p class="text-gray-400 text-sm flex-grow">
                         Engineered 68 predictive features from order book data. Trained LightGBM model on 3.75M samples, achieving 0.87 AUC. Built a backtester modeling latency and slippage.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs">
@@ -299,10 +278,10 @@
                 <div class="card p-6 rounded-md flex flex-col" data-project-title="Statistical Arbitrage Strategy" data-project-desc="Developed a mean-reversion pairs trading strategy using cointegration and the Ornstein-Uhlenbeck process. Implemented Kalman filtering for dynamic hedge ratios.">
                     <div class="flex justify-between items-center mb-4">
                         <i data-lucide="folder" class="w-10 h-10 accent-color"></i>
-                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-[#adb5bd] hover:text-[#0d6efd]"></i></a>
+                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-gray-500 hover:text-white"></i></a>
                     </div>
-                    <h3 class="text-xl font-bold text-[#212529] mb-2">Statistical Arbitrage Strategy</h3>
-                    <p class="text-[#6c757d] text-sm flex-grow">
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">Statistical Arbitrage Strategy</h3>
+                    <p class="text-gray-400 text-sm flex-grow">
                         Developed a mean-reversion pairs trading strategy using cointegration and the Ornstein-Uhlenbeck process. Implemented Kalman filtering for dynamic hedge ratios.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs">
@@ -317,10 +296,10 @@
                 <div class="card p-6 rounded-md flex flex-col" data-project-title="Real-Time Data Analytics" data-project-desc="Built a computer vision system to process video streams at 30 FPS, using statistical models for feature extraction and classification with 92% accuracy on imbalanced data.">
                     <div class="flex justify-between items-center mb-4">
                         <i data-lucide="folder" class="w-10 h-10 accent-color"></i>
-                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-[#adb5bd] hover:text-[#0d6efd]"></i></a>
+                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-gray-500 hover:text-white"></i></a>
                     </div>
-                    <h3 class="text-xl font-bold text-[#212529] mb-2">Real-Time Data Analytics</h3>
-                    <p class="text-[#6c757d] text-sm flex-grow">
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">Real-Time Data Analytics</h3>
+                    <p class="text-gray-400 text-sm flex-grow">
                         Built a computer vision system to process video streams at 30 FPS, using statistical models for feature extraction and classification with 92% accuracy on imbalanced data.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs">
@@ -337,14 +316,14 @@
         <section id="insights" class="py-24 fade-in-section">
             <h2 class="section-heading text-3xl font-bold mb-8 flex items-center">
                 <span class="accent-color font-mono text-2xl mr-4">04.</span> Market Insights
-                <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+                <span class="h-px bg-gray-700 flex-grow ml-6"></span>
             </h2>
             <div class="max-w-3xl">
-                <p class="text-[#6c757d] mb-6">This section uses the Gemini API with Google Search grounding to provide a real-time summary of current trends in quantitative finance. Click the button to get the latest briefing.</p>
-                <button id="get-insights-btn" class="inline-flex items-center gap-2 border border-[#0d6efd] text-[#0d6efd] px-6 py-3 rounded-md hover:bg-[#0d6efd] hover:text-[#ffffff] transition-all duration-300 font-mono">
+                <p class="text-gray-400 mb-6">This section uses the Gemini API with Google Search grounding to provide a real-time summary of current trends in quantitative finance. Click the button to get the latest briefing.</p>
+                <button id="get-insights-btn" class="inline-flex items-center gap-2 border border-[#F59E0B] text-[#F59E0B] px-6 py-3 rounded-md hover:bg-[#F59E0B] hover:text-[#111827] transition-all duration-300 font-mono">
                     ✨ Get Market Briefing
                 </button>
-                <div id="insights-result" class="mt-6 p-6 bg-white border border-[#e9ecef] rounded-md text-sm text-[#495057] hidden">
+                <div id="insights-result" class="mt-6 p-6 bg-gray-800 border border-gray-700 rounded-md text-sm text-gray-300 hidden">
                     <div id="insights-loader" class="flex justify-center items-center">
                         <div class="loader"></div>
                     </div>
@@ -356,15 +335,15 @@
         <!-- Contact Section -->
         <section id="contact" class="py-24 text-center fade-in-section">
             <h2 class="accent-color font-mono text-lg">05. What's Next?</h2>
-            <h3 class="text-5xl font-bold text-[#212529] mt-4 mb-4">Seeking Quantitative Roles</h3>
-            <p class="text-[#6c757d] max-w-xl mx-auto mb-10">
+            <h3 class="text-5xl font-bold text-gray-100 mt-4 mb-4">Seeking Quantitative Roles</h3>
+            <p class="text-gray-400 max-w-xl mx-auto mb-10">
                  I am actively seeking opportunities for ML Engineer, Quantitative Analyst, or Data Scientist roles within financial services. My inbox is always open for interesting challenges.
             </p>
-            <a href="mailto:vinayparihar41@gmail.com" class="inline-block border border-[#0d6efd] text-[#0d6efd] px-8 py-4 rounded-md hover:bg-[#0d6efd] hover:text-white transition-all duration-300 font-mono">
+            <a href="mailto:vinayparihar41@gmail.com" class="inline-block border border-[#F59E0B] text-[#F59E0B] px-8 py-4 rounded-md hover:bg-[#F59E0B] hover:text-[#111827] transition-all duration-300 font-mono">
                 Message Me
             </a>
             <div class="mt-8">
-                <a href="mailto:vinayparihar41@gmail.com" class="font-mono text-sm text-[#6c757d] hover:text-[#0d6efd] transition-colors duration-300">
+                <a href="mailto:vinayparihar41@gmail.com" class="font-mono text-sm text-gray-400 hover:text-[#F59E0B] transition-colors duration-300">
                     vinayparihar41@gmail.com
                 </a>
             </div>
@@ -372,13 +351,13 @@
     </main>
 
     <!-- Footer -->
-    <footer class="text-center py-6 text-sm text-[#6c757d] font-mono">
+    <footer class="text-center py-6 text-sm text-gray-500 font-mono">
         <div>
             <div class="mb-4 flex items-center justify-center space-x-6 md:hidden">
-                <a href="https://github.com/vinay2209" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                <a href="https://github.com/vinay2209" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
                     <i data-lucide="github" class="w-6 h-6"></i>
                 </a>
-                <a href="https://linkedin.com/in/vinayparihar" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                <a href="https://linkedin.com/in/vinayparihar" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
                     <i data-lucide="linkedin" class="w-6 h-6"></i>
                 </a>
             </div>
@@ -389,31 +368,17 @@
     <!-- Modal for Project Explanation -->
     <div id="project-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x"></i>
             </button>
-            <h3 id="modal-title" class="text-xl font-bold mb-4"></h3>
-            <div id="modal-body" class="text-sm text-gray-700"></div>
+            <h3 id="modal-title" class="text-xl font-bold mb-4 text-gray-100"></h3>
+            <div id="modal-body" class="text-sm text-gray-300"></div>
         </div>
     </div>
 
 
     <script>
         lucide.createIcons();
-
-        // --- NEW: Custom Cursor ---
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
-        window.addEventListener('mousemove', (e) => {
-            const { clientX: x, clientY: y } = e;
-            cursorDot.style.transform = `translate(${x}px, ${y}px)`;
-            cursorOutline.style.transform = `translate(${x - 16}px, ${y - 16}px)`;
-        });
-        document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-            el.addEventListener('mouseenter', () => cursorOutline.style.transform = `translate(${event.clientX - 16}px, ${event.clientY - 16}px) scale(1.5)`);
-            el.addEventListener('mouseleave', () => cursorOutline.style.transform = `translate(${event.clientX - 16}px, ${event.clientY - 16}px) scale(1)`);
-        });
-
 
         // Mobile menu toggle
         const menuBtn = document.getElementById('menu-btn');
@@ -529,7 +494,7 @@
                         .map(attr => ({ uri: attr.web?.uri, title: attr.web?.title }))
                         .filter(source => source.uri && source.title);
                     if (sources.length > 0) {
-                        html += '<h4 class="font-bold mt-4 mb-2">Sources:</h4><ul class="list-disc list-inside space-y-1">';
+                        html += '<h4 class="font-bold mt-4 mb-2 text-gray-200">Sources:</h4><ul class="list-disc list-inside space-y-1">';
                         sources.forEach(source => { html += `<li><a href="${source.uri}" target="_blank" class="accent-color hover:underline">${source.title}</a></li>`; });
                         html += '</ul>';
                     }
@@ -576,4 +541,8 @@
     </script>
 </body>
 </html>
+
+
+
+
 
