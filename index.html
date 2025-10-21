@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinay Parihar | Interactive Quantitative Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            cursor: none; /* Hide default cursor */
+        }
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .section-heading {
+            color: #212529;
+        }
+        .accent-color {
+            color: #0d6efd;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px -10px rgba(0,0,0,0.1);
+        }
+        .skill-tag {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+            color: #495057;
+        }
+        .nav-link:hover {
+            color: #0d6efd;
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0d6efd;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(13, 110, 253, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease-out;
+        }
+        /* Terminal Blinking Cursor */
+        .blinking-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background-color: #495057;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            from, to { background-color: transparent }
+            50% { background-color: #495057; }
+        }
+        /* Experience Tabs */
+        .tab-btn {
+            background-color: transparent;
+            border-left: 2px solid #dee2e6;
+            color: #6c757d;
+        }
+        .tab-btn.active {
+            border-left-color: #0d6efd;
+            background-color: rgba(13, 110, 253, 0.05);
+            color: #0d6efd;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-opacity-80 backdrop-blur-md bg-[#f8f9fa]/80 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold accent-color">VP</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="nav-link font-medium">About</a>
+                <a href="#experience" class="nav-link font-medium">Experience</a>
+                <a href="#projects" class="nav-link font-medium">Alpha</a>
+                <a href="#insights" class="nav-link font-medium">Insights</a>
+                <a href="#contact" class="nav-link font-medium">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-slate-700 focus:outline-none">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white">
+            <a href="#about" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">About</a>
+            <a href="#experience" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Experience</a>
+            <a href="#projects" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Alpha</a>
+            <a href="#insights" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Insights</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-slate-700 hover:bg-slate-50">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 lg:px-20 pt-24">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-[80vh] flex flex-col justify-center fade-in-section">
+            <h1 class="text-lg accent-color font-mono">Vinay Parihar</h1>
+            <h2 class="text-4xl sm:text-7xl font-bold text-[#212529] mt-4">Quantitative Analysis & Trading.</h2>
+            <h3 class="text-4xl sm:text-6xl font-bold text-[#495057] mt-2">I engineer alpha and manage risk.</h3>
+            <div class="mt-6">
+                <div id="terminal" class="font-mono text-[#6c757d] text-sm bg-white/50 p-4 rounded-lg border border-[#e9ecef] max-w-xl">
+                    <span id="terminal-text"></span><span class="blinking-cursor"></span>
+                </div>
+            </div>
+            <div class="mt-8 flex items-center space-x-6">
+                <a href="https://github.com/vinay2209" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                    <i data-lucide="github" class="w-6 h-6"></i>
+                </a>
+                <a href="https://linkedin.com/in/vinayparihar" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                    <i data-lucide="linkedin" class="w-6 h-6"></i>
+                </a>
+                <a href="#contact" class="border border-[#0d6efd] text-[#0d6efd] px-6 py-3 rounded-md hover:bg-[#0d6efd] hover:text-[#ffffff] transition-all duration-300 font-mono">
+                    Contact Me
+                </a>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-24 fade-in-section">
+            <h2 class="section-heading text-3xl font-bold mb-8 flex items-center">
+                <span class="accent-color font-mono text-2xl mr-4">01.</span> Profile
+                <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+            </h2>
+            <div class="grid md:grid-cols-5 gap-10">
+                <div class="md:col-span-3 text-[#6c757d] space-y-4">
+                    <p>
+                        As a detail-obsessed engineer, I thrive at the intersection of technology and finance. My primary objective is to leverage my skills in statistical modeling, machine learning, and programming to design, backtest, and deploy profitable, automated trading strategies.
+                    </p>
+                    <p>
+                        My background in electronics and signal processing provides a unique perspective on analyzing financial time-series data and extracting predictive signals from noisy market data. I am passionate about understanding market microstructure and the dynamics of order books to find a competitive edge.
+                    </p>
+                    <p class="text-[#212529]">My core quantitative & technical stack includes:</p>
+                    <ul class="grid grid-cols-2 gap-2 font-mono text-sm">
+                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Python (Pandas, NumPy)</li>
+                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Time Series Analysis</li>
+                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>LightGBM / XGBoost</li>
+                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Backtesting Frameworks</li>
+                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Order Book Analytics</li>
+                        <li class="flex items-center"><i data-lucide="chevron-right" class="w-4 h-4 accent-color"></i>Risk Metrics</li>
+                    </ul>
+                </div>
+                <div class="md:col-span-2 flex justify-center items-start">
+                    <div class="w-64 h-64 relative group">
+                        <div class="absolute inset-0 bg-[#0d6efd] rounded-md z-0 transition-transform duration-300 group-hover:translate-x-3 group-hover:translate-y-3"></div>
+                        <img src="https://placehold.co/400x400/e9ecef/212529?text=VP" alt="Vinay Parihar" class="w-full h-full object-cover rounded-md z-10 relative group-hover:-translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-24 fade-in-section">
+            <h2 class="section-heading text-3xl font-bold mb-8 flex items-center">
+                <span class="accent-color font-mono text-2xl mr-4">02.</span> Career & Education
+                 <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+            </h2>
+            <div class="max-w-3xl">
+                <div class="flex">
+                    <div id="tabs-container" class="w-40">
+                        <button class="tab-btn w-full text-left p-3 text-sm font-medium active" data-tab="experience-tab">Experience</button>
+                        <button class="tab-btn w-full text-left p-3 text-sm font-medium" data-tab="education-tab">Education</button>
+                    </div>
+                    <div class="ml-6 flex-grow">
+                        <div id="experience-tab" class="tab-content active">
+                            <h3 class="text-xl font-semibold text-[#212529]">
+                                Machine Learning Engineer Intern <span class="accent-color">@ Distinct Digital Solution</span>
+                            </h3>
+                            <p class="font-mono text-sm text-[#6c757d] mb-4">June 2024 - Present</p>
+                            <ul class="space-y-2 text-[#6c757d]">
+                                <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Built end-to-end ML pipelines for large-scale time-series datasets.</li>
+                                <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Developed predictive models, improving accuracy via cross-validation.</li>
+                                <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Engineered real-time dashboards to track model performance.</li>
+                            </ul>
+                        </div>
+                        <div id="education-tab" class="tab-content">
+                            <h3 class="text-xl font-semibold text-[#212529]">
+                                B.E., Electronics & Telecom <span class="accent-color">@ Don Bosco Inst. of Tech.</span>
+                            </h3>
+                            <p class="font-mono text-sm text-[#6c757d] mb-4">Expected June 2026</p>
+                            <ul class="space-y-2 text-[#6c757d]">
+                                <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Relevant Coursework: Signal Processing, Probability & Statistics.</li>
+                                <li class="flex"><i data-lucide="chevron-right" class="w-4 h-5 accent-color mr-2 flex-shrink-0"></i>Focus on Linear Algebra and Digital Communications.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-24 fade-in-section">
+            <h2 class="section-heading text-3xl font-bold mb-12 flex items-center">
+                <span class="accent-color font-mono text-2xl mr-4">03.</span> Quantitative Projects
+                <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project 1 -->
+                <div class="card p-6 rounded-md flex flex-col" data-project-title="High-Frequency Trading System" data-project-desc="Engineered 68 predictive features from order book data. Trained LightGBM model on 3.75M samples, achieving 0.87 AUC. Built a backtester modeling latency and slippage.">
+                    <div class="flex justify-between items-center mb-4">
+                        <i data-lucide="folder" class="w-10 h-10 accent-color"></i>
+                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-[#adb5bd] hover:text-[#0d6efd]"></i></a>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#212529] mb-2">High-Frequency Trading System</h3>
+                    <p class="text-[#6c757d] text-sm flex-grow">
+                        Engineered 68 predictive features from order book data. Trained LightGBM model on 3.75M samples, achieving 0.87 AUC. Built a backtester modeling latency and slippage.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-2 py-1 rounded font-medium">Market Microstructure</span>
+                        <span class="skill-tag px-2 py-1 rounded font-medium">LightGBM</span>
+                        <span class="skill-tag px-2 py-1 rounded font-medium">WebSockets</span>
+                    </div>
+                    <button class="explain-project-btn mt-4 text-sm accent-color font-semibold flex items-center gap-1">✨ Explain Project</button>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="card p-6 rounded-md flex flex-col" data-project-title="Statistical Arbitrage Strategy" data-project-desc="Developed a mean-reversion pairs trading strategy using cointegration and the Ornstein-Uhlenbeck process. Implemented Kalman filtering for dynamic hedge ratios.">
+                    <div class="flex justify-between items-center mb-4">
+                        <i data-lucide="folder" class="w-10 h-10 accent-color"></i>
+                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-[#adb5bd] hover:text-[#0d6efd]"></i></a>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#212529] mb-2">Statistical Arbitrage Strategy</h3>
+                    <p class="text-[#6c757d] text-sm flex-grow">
+                        Developed a mean-reversion pairs trading strategy using cointegration and the Ornstein-Uhlenbeck process. Implemented Kalman filtering for dynamic hedge ratios.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-2 py-1 rounded font-medium">Pairs Trading</span>
+                        <span class="skill-tag px-2 py-1 rounded font-medium">Kalman Filter</span>
+                        <span class="skill-tag px-2 py-1 rounded font-medium">Backtesting</span>
+                    </div>
+                    <button class="explain-project-btn mt-4 text-sm accent-color font-semibold flex items-center gap-1">✨ Explain Project</button>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="card p-6 rounded-md flex flex-col" data-project-title="Real-Time Data Analytics" data-project-desc="Built a computer vision system to process video streams at 30 FPS, using statistical models for feature extraction and classification with 92% accuracy on imbalanced data.">
+                    <div class="flex justify-between items-center mb-4">
+                        <i data-lucide="folder" class="w-10 h-10 accent-color"></i>
+                        <a href="https://github.com/vinay2209" target="_blank" class="hover:accent-color"><i data-lucide="github" class="w-6 h-6 text-[#adb5bd] hover:text-[#0d6efd]"></i></a>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#212529] mb-2">Real-Time Data Analytics</h3>
+                    <p class="text-[#6c757d] text-sm flex-grow">
+                        Built a computer vision system to process video streams at 30 FPS, using statistical models for feature extraction and classification with 92% accuracy on imbalanced data.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-2 py-1 rounded font-medium">Real-Time Processing</span>
+                        <span class="skill-tag px-2 py-1 rounded font-medium">OpenCV</span>
+                        <span class="skill-tag px-2 py-1 rounded font-medium">Statistical Models</span>
+                    </div>
+                    <button class="explain-project-btn mt-4 text-sm accent-color font-semibold flex items-center gap-1">✨ Explain Project</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Insights Section -->
+        <section id="insights" class="py-24 fade-in-section">
+            <h2 class="section-heading text-3xl font-bold mb-8 flex items-center">
+                <span class="accent-color font-mono text-2xl mr-4">04.</span> Market Insights
+                <span class="h-px bg-[#dee2e6] flex-grow ml-6"></span>
+            </h2>
+            <div class="max-w-3xl">
+                <p class="text-[#6c757d] mb-6">This section uses the Gemini API with Google Search grounding to provide a real-time summary of current trends in quantitative finance. Click the button to get the latest briefing.</p>
+                <button id="get-insights-btn" class="inline-flex items-center gap-2 border border-[#0d6efd] text-[#0d6efd] px-6 py-3 rounded-md hover:bg-[#0d6efd] hover:text-[#ffffff] transition-all duration-300 font-mono">
+                    ✨ Get Market Briefing
+                </button>
+                <div id="insights-result" class="mt-6 p-6 bg-white border border-[#e9ecef] rounded-md text-sm text-[#495057] hidden">
+                    <div id="insights-loader" class="flex justify-center items-center">
+                        <div class="loader"></div>
+                    </div>
+                    <div id="insights-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 text-center fade-in-section">
+            <h2 class="accent-color font-mono text-lg">05. What's Next?</h2>
+            <h3 class="text-5xl font-bold text-[#212529] mt-4 mb-4">Seeking Quantitative Roles</h3>
+            <p class="text-[#6c757d] max-w-xl mx-auto mb-10">
+                 I am actively seeking opportunities for ML Engineer, Quantitative Analyst, or Data Scientist roles within financial services. My inbox is always open for interesting challenges.
+            </p>
+            <a href="mailto:vinayparihar41@gmail.com" class="inline-block border border-[#0d6efd] text-[#0d6efd] px-8 py-4 rounded-md hover:bg-[#0d6efd] hover:text-white transition-all duration-300 font-mono">
+                Message Me
+            </a>
+            <div class="mt-8">
+                <a href="mailto:vinayparihar41@gmail.com" class="font-mono text-sm text-[#6c757d] hover:text-[#0d6efd] transition-colors duration-300">
+                    vinayparihar41@gmail.com
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 text-sm text-[#6c757d] font-mono">
+        <div>
+            <div class="mb-4 flex items-center justify-center space-x-6 md:hidden">
+                <a href="https://github.com/vinay2209" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                    <i data-lucide="github" class="w-6 h-6"></i>
+                </a>
+                <a href="https://linkedin.com/in/vinayparihar" target="_blank" class="text-[#495057] hover:text-[#0d6efd] transition-colors duration-300">
+                    <i data-lucide="linkedin" class="w-6 h-6"></i>
+                </a>
+            </div>
+            Designed & Built by Vinay Parihar
+        </div>
+    </footer>
+    
+    <!-- Modal for Project Explanation -->
+    <div id="project-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                <i data-lucide="x"></i>
+            </button>
+            <h3 id="modal-title" class="text-xl font-bold mb-4"></h3>
+            <div id="modal-body" class="text-sm text-gray-700"></div>
+        </div>
+    </div>
+
+
+    <script>
+        lucide.createIcons();
+
+        // --- NEW: Custom Cursor ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            const { clientX: x, clientY: y } = e;
+            cursorDot.style.transform = `translate(${x}px, ${y}px)`;
+            cursorOutline.style.transform = `translate(${x - 16}px, ${y - 16}px)`;
+        });
+        document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.style.transform = `translate(${event.clientX - 16}px, ${event.clientY - 16}px) scale(1.5)`);
+            el.addEventListener('mouseleave', () => cursorOutline.style.transform = `translate(${event.clientX - 16}px, ${event.clientY - 16}px) scale(1)`);
+        });
+
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // --- NEW: Terminal Typewriter ---
+        const terminalText = document.getElementById('terminal-text');
+        const linesToType = [
+            "vinayOS ~ % Initializing quantitative models...",
+            "vinayOS ~ % Fetching real-time market data...",
+            "vinayOS ~ % Compiling alpha signals...",
+            "vinayOS ~ % System ready. Welcome."
+        ];
+        let lineIndex = 0;
+        let charIndex = 0;
+        function typeWriter() {
+            if (lineIndex < linesToType.length) {
+                if (charIndex < linesToType[lineIndex].length) {
+                    terminalText.innerHTML += linesToType[lineIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    terminalText.innerHTML += '<br>';
+                    lineIndex++;
+                    charIndex = 0;
+                    setTimeout(typeWriter, 1000);
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', typeWriter);
+
+        // --- NEW: Experience/Education Tabs ---
+        const tabsContainer = document.getElementById('tabs-container');
+        const tabButtons = tabsContainer.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabsContainer.addEventListener('click', (e) => {
+            const clickedButton = e.target.closest('.tab-btn');
+            if (!clickedButton) return;
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+
+            const tabId = clickedButton.dataset.tab;
+            tabContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        });
+
+
+        // Fade-in animation on scroll
+        const faders = document.querySelectorAll('.fade-in-section');
+        const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                appearOnScroll.unobserve(entry.target);
+            });
+        }, appearOptions);
+        faders.forEach(fader => appearOnScroll.observe(fader));
+        
+        // --- Gemini API Integration (No changes here) ---
+        const apiKey = "";
+        const model = "gemini-2.5-flash-preview-09-2025";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+        async function callGeminiAPI(userQuery, useGrounding = false) {
+            const payload = { contents: [{ parts: [{ text: userQuery }] }] };
+            if (useGrounding) payload.tools = [{ "google_search": {} }];
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) { console.error("API Error:", response.status, await response.text()); return null; }
+                const result = await response.json();
+                return result.candidates?.[0] || null;
+            } catch (error) { console.error("Fetch Error:", error); return null; }
+        }
+
+        const getInsightsBtn = document.getElementById('get-insights-btn');
+        const insightsResultDiv = document.getElementById('insights-result');
+        const insightsLoader = document.getElementById('insights-loader');
+        const insightsContent = document.getElementById('insights-content');
+        
+        getInsightsBtn.addEventListener('click', async () => {
+            insightsResultDiv.classList.remove('hidden');
+            insightsLoader.style.display = 'flex';
+            insightsContent.innerHTML = '';
+            getInsightsBtn.disabled = true;
+
+            const prompt = "Provide a concise, one-paragraph summary of the current key trends in quantitative trading and algorithmic strategies, citing your sources.";
+            const candidate = await callGeminiAPI(prompt, true);
+
+            if (candidate && candidate.content?.parts?.[0]?.text) {
+                let html = `<p>${candidate.content.parts[0].text.replace(/\n/g, '<br>')}</p>`;
+                const groundingMetadata = candidate.groundingMetadata;
+                if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                    const sources = groundingMetadata.groundingAttributions
+                        .map(attr => ({ uri: attr.web?.uri, title: attr.web?.title }))
+                        .filter(source => source.uri && source.title);
+                    if (sources.length > 0) {
+                        html += '<h4 class="font-bold mt-4 mb-2">Sources:</h4><ul class="list-disc list-inside space-y-1">';
+                        sources.forEach(source => { html += `<li><a href="${source.uri}" target="_blank" class="accent-color hover:underline">${source.title}</a></li>`; });
+                        html += '</ul>';
+                    }
+                }
+                insightsContent.innerHTML = html;
+            } else {
+                insightsContent.innerHTML = '<p class="text-red-500">Could not retrieve market insights at this time. Please try again later.</p>';
+            }
+            insightsLoader.style.display = 'none';
+            getInsightsBtn.disabled = false;
+        });
+
+        const projectModal = document.getElementById('project-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const explainButtons = document.querySelectorAll('.explain-project-btn');
+
+        explainButtons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const card = button.closest('.card');
+                const title = card.dataset.projectTitle;
+                const desc = card.dataset.projectDesc;
+                
+                modalTitle.textContent = title;
+                modalBody.innerHTML = '<div class="flex justify-center"><div class="loader"></div></div>';
+                projectModal.classList.remove('hidden');
+
+                const prompt = `Explain the following technical project description in a simple, single paragraph for a non-technical recruiter or hiring manager. Be clear and concise. Description: "${desc}"`;
+                const candidate = await callGeminiAPI(prompt, false);
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    modalBody.textContent = candidate.content.parts[0].text;
+                } else {
+                    modalBody.textContent = 'Could not generate an explanation at this time.';
+                }
+            });
+        });
+        
+        const closeModal = () => projectModal.classList.add('hidden');
+        closeModalBtn.addEventListener('click', closeModal);
+        projectModal.addEventListener('click', (e) => { if (e.target === projectModal) closeModal(); });
+
+    </script>
+</body>
+</html>
+
